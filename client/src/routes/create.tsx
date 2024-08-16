@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 import { useUser } from '@clerk/clerk-react'
 import { ClipLoader } from 'react-spinners'
 import { Link } from 'react-router-dom'
+import { validateTicketForm } from '../utils/CreateTicketVilidate'
 
 export default function CreateTicket() {
   const { isSignedIn, isLoaded } = useUser()
@@ -11,8 +12,6 @@ export default function CreateTicket() {
     callMethod: 1,
     keywords: [''],
   })
-
-  console.log(ticket)
 
   function handleKeywordChange(index: number, value: string) {
     const updatedKeywords = [...ticket.keywords]
@@ -49,6 +48,20 @@ export default function CreateTicket() {
     )
   }
 
+  async function createTicket(e: FormEvent<HTMLFormElement>): Promise<void> {
+    e.preventDefault()
+    const validation = validateTicketForm(ticket)
+    if (validation.passed) {
+      await fetch('http://localhost:8080/ticket/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(ticket),
+      })
+    }
+  }
+
   return (
     <section className="min-h-screen flex justify-center items-center md:mt-[-50px] ticket-container">
       <div className="rounded-xl bg-card border-4 border-opacity-10 border-cyan-900 text-card-foreground w-full max-w-md mx-auto bg-white shadow-xl">
@@ -61,7 +74,7 @@ export default function CreateTicket() {
           </p>
         </div>
         <div className="p-6">
-          <form className="grid gap-4">
+          <form className="grid gap-4" onSubmit={createTicket}>
             <div className="grid gap-2">
               <label
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 "
@@ -157,7 +170,7 @@ export default function CreateTicket() {
               </select>
             </div>
             <button
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+              className="items-center bg-cyan-900 text-white hover:bg-cyan-700 p-2 rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90"
               type="submit"
             >
               Create Ticket
