@@ -4,7 +4,7 @@ import { ClipLoader } from 'react-spinners'
 import { Link } from 'react-router-dom'
 
 export default function CreateTicket() {
-  const { isSignedIn, user, isLoaded } = useUser()
+  const { isSignedIn, isLoaded } = useUser()
   const [ticket, setTicket] = useState({
     title: '',
     description: '',
