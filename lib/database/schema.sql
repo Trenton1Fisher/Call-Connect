@@ -29,7 +29,7 @@ CREATE TABLE call_connect_account (
     premium BOOLEAN NOT NULL,  
     tickets_created INTEGER NOT NULL DEFAULT 0,                
     messages_sent INTEGER NOT NULL DEFAULT 0,   
-    num_video_calls INTEGER NOT NULL DEFAULT 0 
+    num_video_calls INTEGER NOT NULL DEFAULT 0, 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -28,3 +28,9 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+.ticket-container {
+  background-image: url('flash3.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
