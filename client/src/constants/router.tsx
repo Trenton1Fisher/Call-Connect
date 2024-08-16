@@ -5,6 +5,8 @@ import RootLayout from '../layouts/rootLayout'
 import Login from '../routes/login'
 import Register from '../routes/register'
 import Account from '../routes/account'
+import Browse from '../routes/browse'
+import CreateTicket from '../routes/create'
 
 export const routerConstant = [
   {
@@ -15,6 +17,8 @@ export const routerConstant = [
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
       { path: '/account', element: <Account /> },
+      { path: '/browse', element: <Browse /> },
+      { path: '/create', element: <CreateTicket /> },
       { path: '*', element: <NotFound /> },
     ],
   },
