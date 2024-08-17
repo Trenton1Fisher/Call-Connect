@@ -8,17 +8,9 @@ CREATE TABLE call_connect_ticket (
     account_id TEXT NOT NULL,
     title TEXT NOT NULL,
     description TEXT,
+    premium BOOLEAN NOT NULL,
     room_category INTEGER NOT NULL CHECK(room_category IN (1,2)),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Keywords that will help with search filtering
-DROP TABLE IF EXISTS call_connect_keywords;
-CREATE TABLE call_connect_keywords (
-    keyword_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    ticket_id INTEGER NOT NULL,           
-    name TEXT NOT NULL,                  
-    FOREIGN KEY (ticket_id) REFERENCES call_connect_ticket(ticket_id) ON DELETE CASCADE
 );
 
 -- Track account permissions and free account usages

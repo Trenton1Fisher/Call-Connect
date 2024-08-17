@@ -19,6 +19,7 @@ export const routerConstant = [
       { path: '/account', element: <Account /> },
       { path: '/browse', element: <Browse /> },
       { path: '/create', element: <CreateTicket /> },
+      { path: '/browse', element: <Browse /> },
       { path: '*', element: <NotFound /> },
     ],
   },

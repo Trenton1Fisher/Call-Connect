@@ -72,7 +72,7 @@ export default function Navbar() {
             </li>
             <li className="max-lg:border-b max-lg:py-3 px-3">
               <Link
-                to="/search"
+                to="/browse"
                 className="hover:text-blue-600 block font-semibold"
               >
                 Join a Call
