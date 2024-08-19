@@ -63,7 +63,6 @@ app.post('/ticket/create', cors(corsOptions), async (req, res) => {
         const limit_reached = await dbUtils.CheckTicketCreatedAmount(
           ticketData.userId
         )
-        console.log(limit_reached)
 
         if (limit_reached) {
           return res.status(400).send('Account Ticket Creation Limit Reached')

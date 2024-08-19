@@ -4,6 +4,7 @@ import { ClipLoader } from 'react-spinners'
 import { Link } from 'react-router-dom'
 import { validateTicketForm } from '../utils/CreateTicketVilidate'
 import { JoinRoomModal } from '../components/partials/createTicketPage/roomModal'
+import CreateTicketErrorModal from '../components/partials/createTicketPage/errorModal'
 
 export default function CreateTicket() {
   const { isSignedIn, user, isLoaded } = useUser()
@@ -85,22 +86,7 @@ export default function CreateTicket() {
   return (
     <>
       {isError.show && (
-        <section className="min-h-screen flex justify-center items-center md:mt-[-50px] ticket-container">
-          <div className="rounded-xl bg-card border-4 border-opacity-10 border-red-500 text-card-foreground w-full max-w-md mx-auto bg-white shadow-xl">
-            <div className="flex flex-col space-y-1.5 p-6">
-              <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight text-red-600">
-                Error Creating Ticket
-              </h3>
-              <p className="text-sm text-red-600">{isError.errorMessage}</p>
-              <a
-                href="/account"
-                className="text-sm text-cyan-900 hover:underline mt-2"
-              >
-                View your account statistics
-              </a>
-            </div>
-          </div>
-        </section>
+        <CreateTicketErrorModal message={isError.errorMessage} />
       )}
       <section className="min-h-screen flex justify-center items-center md:mt-[-50px] ticket-container">
         <div className="rounded-xl bg-card border-4 border-opacity-10 border-cyan-900 text-card-foreground w-full max-w-md mx-auto bg-white shadow-xl">
