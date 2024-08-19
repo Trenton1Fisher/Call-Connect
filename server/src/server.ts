@@ -1,12 +1,19 @@
 import express from 'express'
 import cors from 'cors'
 import sqlite3 from 'sqlite3'
-import { accountCheck, accountStatus, TicketRequest } from './types/types'
+import {
+  accountCheck,
+  AccountDetails,
+  accountStatus,
+  TicketRequest,
+} from './types/types'
 import {
   accountExistsQuery,
   checkAccountStatus,
   createFreeAccountWithUserId,
   createNewTicket,
+  getAccountDetails,
+  updateAccountDetails,
 } from './queries'
 
 const app = express()
@@ -30,6 +37,28 @@ const databaseConnection = new sqlite3.Database(
 
 app.use(cors())
 app.use(express.json())
+
+app.get('/account/data/:accountId', (req, res) => {
+  const accountId = req.params.accountId
+  if (!accountId) {
+    return res.status(400).send('No account Provided')
+  }
+
+  databaseConnection.get(
+    getAccountDetails(),
+    [accountId],
+    (err, row: AccountDetails) => {
+      if (err) {
+        console.error('Error checking account existence:', err.message)
+        return res.status(400).send('Error Retreiving Account Information')
+      }
+      if (!row) {
+        return res.status(400).send('No Account In Database')
+      }
+      return res.status(200).json(row)
+    }
+  )
+})
 
 app.post('/ticket/create', cors(corsOptions), (req, res) => {
   let premium = false
@@ -103,6 +132,18 @@ app.post('/ticket/create', cors(corsOptions), (req, res) => {
           .status(400)
           .send('Error accessing database. Please try again later.')
       }
+      databaseConnection.run(
+        updateAccountDetails(),
+        [ticketData.userId],
+        err => {
+          if (err) {
+            console.error('Error inserting ticket:', err.message)
+            return res
+              .status(400)
+              .send('Error accessing database. Please try again later.')
+          }
+        }
+      )
     }
   )
   return res.status(200).send('Ticket Created')
