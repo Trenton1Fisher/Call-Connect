@@ -9,6 +9,10 @@ export default function CreateTicket() {
   const { isSignedIn, user, isLoaded } = useUser()
   const [loading, setLoading] = useState(false)
   const [joinRoom, setJoinRoom] = useState(false)
+  const [isError, setIsError] = useState({
+    show: false,
+    errorMessage: '',
+  })
   const [ticket, setTicket] = useState({
     title: '',
     description: '',
@@ -58,8 +62,11 @@ export default function CreateTicket() {
           },
           body: JSON.stringify(fullTicket),
         })
-        if (res.ok) {
-          console.log(res)
+        if (!res.ok) {
+          setLoading(false)
+          return res.text().then(errorMessage => {
+            setIsError({ show: true, errorMessage: errorMessage })
+          })
         }
       } catch (error) {
         console.error(error)
@@ -75,10 +82,26 @@ export default function CreateTicket() {
     setJoinRoom(true)
   }
 
-  //function JoinRoom(){}
-
   return (
     <>
+      {isError.show && (
+        <section className="min-h-screen flex justify-center items-center md:mt-[-50px] ticket-container">
+          <div className="rounded-xl bg-card border-4 border-opacity-10 border-red-500 text-card-foreground w-full max-w-md mx-auto bg-white shadow-xl">
+            <div className="flex flex-col space-y-1.5 p-6">
+              <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight text-red-600">
+                Error Creating Ticket
+              </h3>
+              <p className="text-sm text-red-600">{isError.errorMessage}</p>
+              <a
+                href="/account"
+                className="text-sm text-cyan-900 hover:underline mt-2"
+              >
+                View your account statistics
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
       <section className="min-h-screen flex justify-center items-center md:mt-[-50px] ticket-container">
         <div className="rounded-xl bg-card border-4 border-opacity-10 border-cyan-900 text-card-foreground w-full max-w-md mx-auto bg-white shadow-xl">
           <div className="flex flex-col space-y-1.5 p-6">

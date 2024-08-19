@@ -1,20 +1,13 @@
 import express from 'express'
 import cors from 'cors'
-import sqlite3 from 'sqlite3'
 import {
   accountCheck,
   AccountDetails,
   accountStatus,
   TicketRequest,
+  tickets_created,
 } from './types/types'
-import {
-  accountExistsQuery,
-  checkAccountStatus,
-  createFreeAccountWithUserId,
-  createNewTicket,
-  getAccountDetails,
-  updateAccountDetails,
-} from './queries'
+import * as dbUtils from './utils/dbUtils'
 
 const app = express()
 const PORT = 8080
@@ -24,129 +17,75 @@ const corsOptions = {
   optionSuccessStatus: 200,
 }
 
-const databaseConnection = new sqlite3.Database(
-  '../database/mydatabase.db',
-  err => {
-    if (err) {
-      console.error('Error connecting to the database:', err.message)
-    } else {
-      console.log('Connected to the mydatabase.db SQLite database.')
-    }
-  }
-)
-
 app.use(cors())
 app.use(express.json())
 
-app.get('/account/data/:accountId', (req, res) => {
+//Get account Statistics
+app.get('/account/data/:accountId', async (req, res) => {
   const accountId = req.params.accountId
   if (!accountId) {
     return res.status(400).send('No account Provided')
   }
 
-  databaseConnection.get(
-    getAccountDetails(),
-    [accountId],
-    (err, row: AccountDetails) => {
-      if (err) {
-        console.error('Error checking account existence:', err.message)
-        return res.status(400).send('Error Retreiving Account Information')
-      }
-      if (!row) {
-        return res.status(400).send('No Account In Database')
-      }
-      return res.status(200).json(row)
+  try {
+    const account = await dbUtils.GetAccountDetails(accountId)
+    if (!account) {
+      return res.status(400).send('No account in Database')
     }
-  )
+    return res.status(200).json(account)
+  } catch (error) {
+    return res.status(500).send('An unexpected error happened')
+  }
 })
 
-app.post('/ticket/create', cors(corsOptions), (req, res) => {
+//Create New Ticket, need to see if account statistics exists, check total usage, and create ticket
+app.post('/ticket/create', cors(corsOptions), async (req, res) => {
   let premium = false
   const ticketData = req.body as TicketRequest
+
   if (!ticketData || !ticketData.title) {
     return res.status(400).send('Invalid Request Body')
   }
 
-  databaseConnection.get(
-    accountExistsQuery(),
-    [ticketData.userId],
-    (err, row: accountCheck) => {
-      if (err) {
-        console.error('Error checking account existence:', err.message)
-        return res.status(400).send('Error Retreiving Account Information')
-      }
+  try {
+    const accountExists = await dbUtils.CheckAccountExists(ticketData.userId)
 
-      if (row) {
-        console.log('Query result:', row)
-        if (row.count === 0) {
-          databaseConnection.run(
-            createFreeAccountWithUserId(),
-            [ticketData.userId, false],
-            err => {
-              if (err) {
-                console.error('Error checking account existence:', err.message)
-                return res
-                  .status(400)
-                  .send('Could Not Generate Account For User')
-              }
-            }
-          )
-        } else {
-          databaseConnection.get(
-            checkAccountStatus(),
-            [ticketData.userId],
-            (err, row: accountStatus) => {
-              if (err) {
-                console.error('Error checking account existence:', err.message)
-                return res
-                  .status(400)
-                  .send('Could Not Generate Account For User')
-              }
-              if (row.premium === 1) {
-                premium = true
-              }
-            }
-          )
-        }
+    if (accountExists === 0) {
+      await dbUtils.createFreeAccount(ticketData.userId)
+    } else {
+      const account_premium = await dbUtils.checkAccountPremiumStatus(
+        ticketData.userId
+      )
+
+      if (account_premium === 1) {
+        premium = true
       } else {
-        return res
-          .status(400)
-          .send('Error Accessing Database Please Try Again Later')
+        const limit_reached = await dbUtils.CheckTicketCreatedAmount(
+          ticketData.userId
+        )
+        console.log(limit_reached)
+
+        if (limit_reached) {
+          return res.status(400).send('Account Ticket Creation Limit Reached')
+        }
       }
     }
-  )
 
-  databaseConnection.run(
-    createNewTicket(),
-    [
+    await dbUtils.CreateTicket(
       ticketData.userId,
       ticketData.title,
       ticketData.description,
-      false,
-      ticketData.callMethod,
-    ],
-    err => {
-      if (err) {
-        console.error('Error inserting ticket:', err.message)
-        return res
-          .status(400)
-          .send('Error accessing database. Please try again later.')
-      }
-      databaseConnection.run(
-        updateAccountDetails(),
-        [ticketData.userId],
-        err => {
-          if (err) {
-            console.error('Error inserting ticket:', err.message)
-            return res
-              .status(400)
-              .send('Error accessing database. Please try again later.')
-          }
-        }
-      )
-    }
-  )
-  return res.status(200).send('Ticket Created')
+      premium,
+      ticketData.callMethod
+    )
+
+    await dbUtils.UpdateAccountDetails(ticketData.userId)
+
+    return res.status(200).send('Ticket Created')
+  } catch (error) {
+    console.error('Error creating ticket:', (error as Error).message)
+    return res.status(500).send('Internal Server Error')
+  }
 })
 
 app.listen(PORT, () => {

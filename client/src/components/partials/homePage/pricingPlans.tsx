@@ -28,7 +28,7 @@ export default function SubscriptionPlans() {
             <ul className="space-y-5">
               {[
                 '4 problem tickets per month',
-                '4 video calls per month (15 minutes each)',
+                'Video Calls Limited To 15 minutes each',
                 '100 messages per month',
               ].map((item, index) => (
                 <li key={index} className="flex items-center">

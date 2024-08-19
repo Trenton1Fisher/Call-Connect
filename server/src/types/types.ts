@@ -18,3 +18,7 @@ export type accountCheck = {
 export type accountStatus = {
   premium: number
 }
+
+export type tickets_created = {
+  tickets_created: number
+}
