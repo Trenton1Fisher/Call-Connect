@@ -6,14 +6,20 @@ import {
   createNewTicketQuery,
   getAccountDetailsQuery,
   getTicketsCreatedQuery,
+  getTicketsDataQuery,
+  getTotalNumTicketsQuery,
   updateAccountDetailsQuery,
 } from './queries'
 import {
   accountCheck,
   AccountDetails,
   accountStatus,
+  countCheck,
   tickets_created,
+  TicketSearch,
+  TicketSearchTickets,
 } from '../types/types'
+import { v5 as uuidv5 } from 'uuid'
 
 const databaseConnection = new sqlite3.Database(
   '../database/mydatabase.db',
@@ -68,7 +74,7 @@ export function createFreeAccount(userId: string): Promise<void> {
   return new Promise((resolve, reject) => {
     databaseConnection.run(
       createFreeAccountWithUserIdQuery(),
-      [userId],
+      [userId, false],
       err => {
         if (err) {
           console.error('Error creating New Account:', err.message)
@@ -126,10 +132,11 @@ export function CreateTicket(
   premium: boolean,
   callMethod: number
 ): Promise<void> {
+  const roomId = generateRoomId(userId, title)
   return new Promise((resolve, reject) => {
     databaseConnection.run(
       createNewTicketQuery(),
-      [userId, title, description, premium, callMethod],
+      [userId, title, description, premium, callMethod, roomId],
       err => {
         if (err) {
           console.error('Error creating ticket:', err.message)
@@ -142,6 +149,13 @@ export function CreateTicket(
   })
 }
 
+function generateRoomId(userId: string, title: string) {
+  const combined = `${userId}-${title}`
+  const roomId = uuidv5(combined, uuidv5.URL)
+
+  return roomId
+}
+
 export function UpdateAccountDetails(userId: string): Promise<void> {
   return new Promise((resolve, reject) => {
     databaseConnection.run(updateAccountDetailsQuery(), [userId], err => {
@@ -152,5 +166,41 @@ export function UpdateAccountDetails(userId: string): Promise<void> {
         resolve()
       }
     })
+  })
+}
+
+export function getTotalTicketsCount(): Promise<number> {
+  return new Promise((resolve, reject) => {
+    databaseConnection.get(
+      getTotalNumTicketsQuery(),
+      (err, row: countCheck) => {
+        if (err) {
+          console.error('Error Getting Open Tickets Count:', err.message)
+          reject(new Error('Could not Search Tickets Count'))
+        } else {
+          resolve(row.count)
+        }
+      }
+    )
+  })
+}
+
+export function getPaginatedTickets(
+  page: number,
+  pageSize: number
+): Promise<TicketSearchTickets[]> {
+  return new Promise((resolve, reject) => {
+    databaseConnection.all(
+      getTicketsDataQuery(),
+      [pageSize, (page - 1) * pageSize],
+      (err, rows: TicketSearchTickets[]) => {
+        if (err) {
+          console.error('Error Getting Open Tickets:', err.message)
+          reject(new Error('Could Not Search Tickets'))
+        } else {
+          resolve(rows)
+        }
+      }
+    )
   })
 }

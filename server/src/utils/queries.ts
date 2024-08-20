@@ -11,7 +11,7 @@ export function createFreeAccountWithUserIdQuery(): string {
 }
 
 export function createNewTicketQuery(): string {
-  return 'INSERT INTO call_connect_ticket (account_id, title, description, premium, room_category) VALUES (?, ?, ?, ?, ?)'
+  return 'INSERT INTO call_connect_ticket (account_id, title, description, premium, room_category, room_id) VALUES (?, ?, ?, ?, ?, ?)'
 }
 
 export function updateAccountDetailsQuery(): string {
@@ -24,4 +24,12 @@ export function getAccountDetailsQuery(): string {
 
 export function getTicketsCreatedQuery(): string {
   return 'SELECT tickets_created FROM call_connect_account WHERE account_id = ?'
+}
+
+export function getTotalNumTicketsQuery(): string {
+  return 'SELECT COUNT(*) AS count FROM call_connect_ticket'
+}
+
+export function getTicketsDataQuery(): string {
+  return 'SELECT title, description, premium, room_id, created_at, room_category FROM call_connect_ticket ORDER BY premium DESC, created_at ASC LIMIT ? OFFSET ?'
 }

@@ -5,6 +5,20 @@ export type TicketRequest = {
   callMethod: number
 }
 
+export type TicketSearch = {
+  count: number
+  tickets: TicketSearchTickets[]
+}
+
+export type TicketSearchTickets = {
+  title: string
+  description: string
+  callMethod: number
+  premium: boolean
+  room_category: number
+  created_at: Date
+}
+
 export type AccountDetails = {
   premium: number
   tickets_created: number
@@ -12,6 +26,10 @@ export type AccountDetails = {
 }
 
 export type accountCheck = {
+  count: number
+}
+
+export type countCheck = {
   count: number
 }
 

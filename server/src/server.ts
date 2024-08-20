@@ -1,12 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import {
-  accountCheck,
-  AccountDetails,
-  accountStatus,
-  TicketRequest,
-  tickets_created,
-} from './types/types'
+import { TicketRequest } from './types/types'
 import * as dbUtils from './utils/dbUtils'
 
 const app = express()
@@ -28,6 +22,10 @@ app.get('/account/data/:accountId', async (req, res) => {
   }
 
   try {
+    const accountExists = await dbUtils.CheckAccountExists(accountId)
+    if (accountExists === 0) {
+      await dbUtils.createFreeAccount(accountId)
+    }
     const account = await dbUtils.GetAccountDetails(accountId)
     if (!account) {
       return res.status(400).send('No account in Database')
@@ -83,6 +81,22 @@ app.post('/ticket/create', cors(corsOptions), async (req, res) => {
     return res.status(200).send('Ticket Created')
   } catch (error) {
     console.error('Error creating ticket:', (error as Error).message)
+    return res.status(500).send('Internal Server Error')
+  }
+})
+
+//Search Tickets with pagination page included
+app.get('/ticket/getAll/:page', async (req, res) => {
+  const page = req.params.page
+  try {
+    const ticketsCount = await dbUtils.getTotalTicketsCount()
+    const ticketSearch = await dbUtils.getPaginatedTickets(Number(page), 15)
+    if (!ticketSearch) {
+      return res.status(400).send('No tickets Found')
+    }
+    return res.status(200).json({ count: ticketsCount, tickets: ticketSearch })
+  } catch (error) {
+    console.error('Error Searching tickets:', (error as Error).message)
     return res.status(500).send('Internal Server Error')
   }
 })

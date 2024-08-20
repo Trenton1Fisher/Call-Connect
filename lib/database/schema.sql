@@ -1,6 +1,3 @@
--- FK support is off by defualt for SQLite
-PRAGMA foreign_keys = ON;
-
 -- Tickets that users can create in call-connect web app
 DROP TABLE IF EXISTS call_connect_ticket;
 CREATE TABLE call_connect_ticket (
@@ -10,6 +7,7 @@ CREATE TABLE call_connect_ticket (
     description TEXT,
     premium BOOLEAN NOT NULL,
     room_category INTEGER NOT NULL CHECK(room_category IN (1,2)),
+    room_id TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
