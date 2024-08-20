@@ -1,3 +1,6 @@
+import { SignedIn, SignedOut } from '@clerk/clerk-react'
+import { Link } from 'react-router-dom'
+
 export default function Header() {
   return (
     <div className="relative">
@@ -12,9 +15,22 @@ export default function Header() {
             Quick, efficient, and collaborative.
           </p>
           <div className="mt-10">
-            <button className="px-6 py-3 rounded-xl text-white bg-cyan-900 transition-all hover:bg-cyan-800">
-              Get started
-            </button>
+            <SignedIn>
+              <Link
+                to="/create"
+                className="w-full mt-12 px-6 py-3 rounded-xl text-white bg-cyan-900 transition-all hover:bg-cyan-800"
+              >
+                Get Started
+              </Link>
+            </SignedIn>
+            <SignedOut>
+              <Link
+                to="/login"
+                className="w-full mt-6 px-6 py-3 rounded-xl text-white bg-cyan-900 transition-all hover:bg-cyan-800"
+              >
+                Get Started
+              </Link>
+            </SignedOut>
           </div>
         </div>
         <hr className="my-12 border-gray-300" />

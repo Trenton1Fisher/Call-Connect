@@ -10,6 +10,7 @@ export default function CreateTicket() {
   const { isSignedIn, user, isLoaded } = useUser()
   const [loading, setLoading] = useState(false)
   const [joinRoom, setJoinRoom] = useState(false)
+  const [roomNumber, setRoomNumber] = useState('')
   const [isError, setIsError] = useState({
     show: false,
     errorMessage: '',
@@ -69,6 +70,8 @@ export default function CreateTicket() {
             setIsError({ show: true, errorMessage: errorMessage })
           })
         }
+        const roomId: string = await res.json()
+        setRoomNumber(roomId)
       } catch (error) {
         console.error(error)
         setLoading(false)
@@ -168,7 +171,9 @@ export default function CreateTicket() {
           </div>
         </div>
       </section>
-      {joinRoom && <JoinRoomModal joinRoom={joinRoom} />}
+      {joinRoom && (
+        <JoinRoomModal joinRoom={joinRoom} roomNumber={roomNumber} />
+      )}
     </>
   )
 }

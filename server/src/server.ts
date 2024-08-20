@@ -68,7 +68,7 @@ app.post('/ticket/create', cors(corsOptions), async (req, res) => {
       }
     }
 
-    await dbUtils.CreateTicket(
+    const roomId = await dbUtils.CreateTicket(
       ticketData.userId,
       ticketData.title,
       ticketData.description,
@@ -78,7 +78,7 @@ app.post('/ticket/create', cors(corsOptions), async (req, res) => {
 
     await dbUtils.UpdateAccountDetails(ticketData.userId)
 
-    return res.status(200).send('Ticket Created')
+    return res.status(200).json(roomId)
   } catch (error) {
     console.error('Error creating ticket:', (error as Error).message)
     return res.status(500).send('Internal Server Error')
@@ -95,6 +95,17 @@ app.get('/ticket/getAll/:page', async (req, res) => {
       return res.status(400).send('No tickets Found')
     }
     return res.status(200).json({ count: ticketsCount, tickets: ticketSearch })
+  } catch (error) {
+    console.error('Error Searching tickets:', (error as Error).message)
+    return res.status(500).send('Internal Server Error')
+  }
+})
+
+app.post('/ticket/delete', async (req, res) => {
+  const roomId = req.body as { id: string }
+  try {
+    await dbUtils.DeleteTicketWithRoomId(roomId.id)
+    return res.status(200).send('Ticket Deleted')
   } catch (error) {
     console.error('Error Searching tickets:', (error as Error).message)
     return res.status(500).send('Internal Server Error')

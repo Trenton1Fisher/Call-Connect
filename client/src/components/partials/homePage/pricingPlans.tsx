@@ -1,3 +1,6 @@
+import { SignedIn, SignedOut } from '@clerk/clerk-react'
+import { Link } from 'react-router-dom'
+
 export default function SubscriptionPlans() {
   return (
     <div className="mt-32 max-w-7xl mx-auto">
@@ -16,12 +19,24 @@ export default function SubscriptionPlans() {
             <h2 className="text-4xl font-semibold">
               $0<span className="text-gray-500 ml-2 text-[15px]">Free</span>
             </h2>
-            <button
-              type="button"
-              className="w-full mt-6 px-6 py-3 rounded-xl text-white bg-cyan-900 transition-all hover:bg-cyan-800"
-            >
-              Get Started
-            </button>
+            <div className="flex items-center justify-center text-center">
+              <SignedIn>
+                <Link
+                  to="/create"
+                  className="w-full mt-12 px-6 py-3 rounded-xl text-white bg-cyan-900 transition-all hover:bg-cyan-800"
+                >
+                  Get Started
+                </Link>
+              </SignedIn>
+              <SignedOut>
+                <Link
+                  to="/login"
+                  className="w-full mt-6 px-6 py-3 rounded-xl text-white bg-cyan-900 transition-all hover:bg-cyan-800"
+                >
+                  Get Started
+                </Link>
+              </SignedOut>
+            </div>
           </div>
           <div className="mt-6">
             <h4 className="text-base font-bold mb-4">Plan Includes</h4>
@@ -63,12 +78,24 @@ export default function SubscriptionPlans() {
                 One Time Payment
               </span>
             </h2>
-            <button
-              type="button"
-              className="w-full mt-6 px-6 py-3 rounded-xl text-black bg-white transition-all hover:bg-gray-100"
-            >
-              Get Started
-            </button>
+            <div className="flex items-center justify-center text-center">
+              <SignedIn>
+                <Link
+                  to="/premium"
+                  className="w-full mt-12 px-6 py-3 rounded-xl bg-white text-black transition-all hover:bg-gray-300"
+                >
+                  Get Started
+                </Link>
+              </SignedIn>
+              <SignedOut>
+                <Link
+                  to="/login"
+                  className="w-full mt-6 px-6 py-3 rounded-xl bg-white transition-all text-black hover:bg-gray-300"
+                >
+                  Get Started
+                </Link>
+              </SignedOut>
+            </div>
           </div>
           <div className="mt-6">
             <h4 className="text-base font-bold mb-4">Plan Includes</h4>

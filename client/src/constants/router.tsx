@@ -7,6 +7,7 @@ import Register from '../routes/register'
 import Account from '../routes/account'
 import Browse from '../routes/browse'
 import CreateTicket from '../routes/create'
+import PaymentPage from '../routes/payment'
 
 export const routerConstant = [
   {
@@ -20,6 +21,7 @@ export const routerConstant = [
       { path: '/browse', element: <Browse /> },
       { path: '/create', element: <CreateTicket /> },
       { path: '/browse', element: <Browse /> },
+      { path: '/premium', element: <PaymentPage /> },
       { path: '*', element: <NotFound /> },
     ],
   },

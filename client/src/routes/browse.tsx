@@ -144,9 +144,12 @@ export default function Browse() {
                     </div>
                   </a>
                   <div className="text-sm md:text-base text-left text-gray-600 dark:text-gray-400 px-8 py-2">
-                    <button className=" truncate bg-cyan-900 text-white font-semibold p-2 rounded-lg">
+                    <Link
+                      to={`/call?room=${ticket.room_id}`}
+                      className=" truncate bg-cyan-900 text-white font-semibold p-2 rounded-lg"
+                    >
                       Join Call
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

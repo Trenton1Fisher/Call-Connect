@@ -33,3 +33,7 @@ export function getTotalNumTicketsQuery(): string {
 export function getTicketsDataQuery(): string {
   return 'SELECT title, description, premium, room_id, created_at, room_category FROM call_connect_ticket ORDER BY premium DESC, created_at ASC LIMIT ? OFFSET ?'
 }
+
+export function deleteTicketWithRoomIdQuery(): string {
+  return 'DELETE FROM call_connect_ticket WHERE room_id = ?'
+}

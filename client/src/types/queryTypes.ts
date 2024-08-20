@@ -16,4 +16,5 @@ export type TicketSearchTickets = {
   premium: boolean
   created_at: Date
   room_category: number
+  room_id: string
 }

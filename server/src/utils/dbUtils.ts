@@ -4,6 +4,7 @@ import {
   checkAccountStatusQuery,
   createFreeAccountWithUserIdQuery,
   createNewTicketQuery,
+  deleteTicketWithRoomIdQuery,
   getAccountDetailsQuery,
   getTicketsCreatedQuery,
   getTicketsDataQuery,
@@ -131,7 +132,7 @@ export function CreateTicket(
   description: string,
   premium: boolean,
   callMethod: number
-): Promise<void> {
+): Promise<string> {
   const roomId = generateRoomId(userId, title)
   return new Promise((resolve, reject) => {
     databaseConnection.run(
@@ -142,7 +143,7 @@ export function CreateTicket(
           console.error('Error creating ticket:', err.message)
           reject(new Error('Could not create ticket'))
         } else {
-          resolve()
+          resolve(roomId)
         }
       }
     )
@@ -150,7 +151,8 @@ export function CreateTicket(
 }
 
 function generateRoomId(userId: string, title: string) {
-  const combined = `${userId}-${title}`
+  const randomElement = Date.now().toString()
+  const combined = `${userId}-${title}-${randomElement}`
   const roomId = uuidv5(combined, uuidv5.URL)
 
   return roomId
@@ -202,5 +204,17 @@ export function getPaginatedTickets(
         }
       }
     )
+  })
+}
+
+export function DeleteTicketWithRoomId(roomId: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    databaseConnection.run(deleteTicketWithRoomIdQuery(), [roomId], err => {
+      if (err) {
+        console.error('Error Getting Open Tickets:', err.message)
+        reject(new Error('Could Not Search Tickets'))
+      }
+      resolve()
+    })
   })
 }

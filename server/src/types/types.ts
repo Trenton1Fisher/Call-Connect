@@ -16,6 +16,7 @@ export type TicketSearchTickets = {
   callMethod: number
   premium: boolean
   room_category: number
+  room_id: string
   created_at: Date
 }
 
