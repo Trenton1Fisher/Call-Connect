@@ -18,3 +18,7 @@ export type TicketSearchTickets = {
   room_category: number
   room_id: string
 }
+
+export type ClientSecretReturn = {
+  client_secret: string
+}

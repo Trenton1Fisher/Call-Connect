@@ -1,8 +1,17 @@
 import express from 'express'
 import cors from 'cors'
-import { TicketRequest } from './types/types'
+import { TicketRequest, update_account } from './types/types'
 import * as dbUtils from './utils/dbUtils'
+import dotenv from 'dotenv'
+import Stripe from 'stripe'
 
+dotenv.config()
+
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY
+if (!STRIPE_SECRET_KEY) {
+  console.log('Stripe key not found')
+}
+const stripe = new Stripe(STRIPE_SECRET_KEY as string)
 const app = express()
 const PORT = 8080
 
@@ -109,6 +118,53 @@ app.post('/ticket/delete', async (req, res) => {
   } catch (error) {
     console.error('Error Searching tickets:', (error as Error).message)
     return res.status(500).send('Internal Server Error')
+  }
+})
+
+app.get('/checkout/create-session', async (req, res) => {
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: 1000,
+      currency: 'usd',
+    })
+
+    return res.status(200).json({ client_secret: paymentIntent.client_secret })
+  } catch (error) {
+    return res.status(500).send('Could not get Client Secret')
+  }
+})
+
+app.post('/checkout/create-session', async (req, res) => {
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    mode: 'payment',
+    line_items: [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'Call-Connect Premium Account',
+          },
+          unit_amount: 1000,
+        },
+        quantity: 1,
+      },
+    ],
+    success_url: 'http://localhost:5173/success',
+    cancel_url: 'http://localhost:5173/cancel',
+  })
+
+  res.json({ id: session.id })
+})
+
+app.post('/account/update/premium', async (req, res) => {
+  const userId = req.body as update_account
+
+  try {
+    await dbUtils.UpdateAccountToPremium(userId.userID)
+    return res.status(200).send('Account Updated')
+  } catch (error) {
+    return res.status(500).send('Could not Update Account')
   }
 })
 

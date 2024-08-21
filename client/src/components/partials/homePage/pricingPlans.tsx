@@ -1,7 +1,35 @@
 import { SignedIn, SignedOut } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom'
+import { loadStripe } from '@stripe/stripe-js'
 
 export default function SubscriptionPlans() {
+  //Setup Stripe Payment Session
+  async function makePayment() {
+    const stripe = await loadStripe(
+      import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY as string
+    )
+    if (!stripe) {
+      return
+    }
+    const response = await fetch(
+      'http://localhost:8080/checkout/create-session',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ price: 1000 }),
+      }
+    )
+    const session = await response.json()
+    const result = await stripe.redirectToCheckout({
+      sessionId: session.id,
+    })
+    if (result.error) {
+      console.log(result.error)
+    }
+  }
+
   return (
     <div className="mt-32 max-w-7xl mx-auto">
       <div className="text-center">
@@ -80,12 +108,12 @@ export default function SubscriptionPlans() {
             </h2>
             <div className="flex items-center justify-center text-center">
               <SignedIn>
-                <Link
-                  to="/premium"
+                <button
+                  onClick={makePayment}
                   className="w-full mt-12 px-6 py-3 rounded-xl bg-white text-black transition-all hover:bg-gray-300"
                 >
                   Get Started
-                </Link>
+                </button>
               </SignedIn>
               <SignedOut>
                 <Link

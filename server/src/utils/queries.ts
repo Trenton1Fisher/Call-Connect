@@ -37,3 +37,7 @@ export function getTicketsDataQuery(): string {
 export function deleteTicketWithRoomIdQuery(): string {
   return 'DELETE FROM call_connect_ticket WHERE room_id = ?'
 }
+
+export function UpdateAccountToPremiumQuery(): string {
+  return 'UPDATE call_connect_account SET premium = 1 WHERE account_id = ?'
+}

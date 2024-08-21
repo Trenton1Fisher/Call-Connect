@@ -3,9 +3,9 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import Navbar from '../components/shared/navbar'
 import Footer from '../components/shared/footer'
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
-if (!PUBLISHABLE_KEY) {
+if (!CLERK_PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key')
 }
 
@@ -16,7 +16,7 @@ export default function RootLayout() {
     <ClerkProvider
       routerPush={to => navigate(to)}
       routerReplace={to => navigate(to, { replace: true })}
-      publishableKey={PUBLISHABLE_KEY}
+      publishableKey={CLERK_PUBLISHABLE_KEY}
     >
       <main>
         <Navbar />

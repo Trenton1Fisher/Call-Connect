@@ -10,6 +10,7 @@ import {
   getTicketsDataQuery,
   getTotalNumTicketsQuery,
   updateAccountDetailsQuery,
+  UpdateAccountToPremiumQuery,
 } from './queries'
 import {
   accountCheck,
@@ -210,6 +211,18 @@ export function getPaginatedTickets(
 export function DeleteTicketWithRoomId(roomId: string): Promise<void> {
   return new Promise((resolve, reject) => {
     databaseConnection.run(deleteTicketWithRoomIdQuery(), [roomId], err => {
+      if (err) {
+        console.error('Error Getting Open Tickets:', err.message)
+        reject(new Error('Could Not Search Tickets'))
+      }
+      resolve()
+    })
+  })
+}
+
+export function UpdateAccountToPremium(userId: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    databaseConnection.run(UpdateAccountToPremiumQuery(), [userId], err => {
       if (err) {
         console.error('Error Getting Open Tickets:', err.message)
         reject(new Error('Could Not Search Tickets'))

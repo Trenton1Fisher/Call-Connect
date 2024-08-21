@@ -41,3 +41,7 @@ export type accountStatus = {
 export type tickets_created = {
   tickets_created: number
 }
+
+export type update_account = {
+  userID: string
+}
