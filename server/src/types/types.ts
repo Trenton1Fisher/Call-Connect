@@ -50,6 +50,14 @@ export type room_exists = {
   room_exists: number
 }
 
+export type ticket_exists = {
+  has_ticket: number
+}
+
 export type room_exists_id = {
   roomId: string
+}
+
+export type messages_sent = {
+  messages_sent: number
 }

@@ -3,6 +3,7 @@ import cors from 'cors'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import {
+  messages_sent,
   room_exists,
   room_exists_id,
   TicketRequest,
@@ -201,6 +202,39 @@ app.post('/account/update/premium', async (req, res) => {
     return res.status(200).send('Account Updated')
   } catch (error) {
     return res.status(500).send('Could not Update Account')
+  }
+})
+
+app.post('/message/check', async (req, res) => {
+  const userId = req.body.userId
+  console.log(userId)
+
+  try {
+    const ticket = await dbUtils.CheckIfUserCreatedRoom(userId)
+    if (!ticket) {
+      return res.status(200).send('User did not create this room')
+    }
+
+    const account_status = await dbUtils.checkAccountPremiumStatus(userId)
+    if (account_status === 1) {
+      return res.status(200).send('Premium Account')
+    }
+
+    const messagesSent: messages_sent = await dbUtils.CheckAccountMessagesSent(
+      userId
+    )
+    console.log(messagesSent)
+    const MESSAGE_LIMIT = 100
+    if (messagesSent.messages_sent >= MESSAGE_LIMIT) {
+      return res.status(403).send('Message limit reached')
+    }
+
+    await dbUtils.incrementMessagesSent(userId)
+
+    return res.status(200).send('Message Sent')
+  } catch (error) {
+    console.error('Error handling message check:', error)
+    return res.status(500).send('Could not update account')
   }
 })
 

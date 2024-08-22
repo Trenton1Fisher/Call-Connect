@@ -3,6 +3,8 @@ import {
   accountExistsQuery,
   checkAccountStatusQuery,
   CheckIfRoomExistsQuery,
+  checkIfUserHasTicketQuery,
+  checkMessagesSentLimitQuery,
   createFreeAccountWithUserIdQuery,
   createNewTicketQuery,
   deleteTicketWithRoomIdQuery,
@@ -10,6 +12,7 @@ import {
   getTicketsCreatedQuery,
   getTicketsDataQuery,
   getTotalNumTicketsQuery,
+  incrementMessagesSentQuery,
   updateAccountDetailsQuery,
   UpdateAccountToPremiumQuery,
 } from './queries'
@@ -18,7 +21,9 @@ import {
   AccountDetails,
   accountStatus,
   countCheck,
+  messages_sent,
   room_exists,
+  ticket_exists,
   tickets_created,
   TicketSearch,
   TicketSearchTickets,
@@ -252,5 +257,58 @@ export function CheckIfRoomExists(roomId: string): Promise<number> {
         }
       }
     )
+  })
+}
+
+export function CheckIfUserCreatedRoom(userId: string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    databaseConnection.get(
+      checkIfUserHasTicketQuery(),
+      [userId],
+      (err, row: ticket_exists | undefined) => {
+        if (err) {
+          console.error('Error Getting Open Tickets:', err.message)
+          reject(new Error('Could Not Search Tickets'))
+        } else {
+          if (row && row.has_ticket) {
+            resolve(1)
+          } else {
+            resolve(0)
+          }
+        }
+      }
+    )
+  })
+}
+
+export function CheckAccountMessagesSent(
+  userId: string
+): Promise<messages_sent> {
+  return new Promise((resolve, reject) => {
+    databaseConnection.get(
+      checkMessagesSentLimitQuery(),
+      [userId],
+      (err, row: messages_sent) => {
+        if (err) {
+          console.error('Error Getting Open Tickets:', err.message)
+          reject(new Error('Could Not Search Tickets'))
+        } else {
+          resolve(row)
+        }
+      }
+    )
+  })
+}
+
+export function incrementMessagesSent(userId: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    databaseConnection.get(incrementMessagesSentQuery(), [userId], err => {
+      if (err) {
+        console.error('Error Getting Open Tickets:', err.message)
+        reject(new Error('Could Not Search Tickets'))
+      } else {
+        resolve()
+      }
+    })
   })
 }

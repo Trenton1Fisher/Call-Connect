@@ -1,13 +1,18 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { socket } from '../config/socket'
-import { useEffect, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { MessageType } from '../types/queryTypes'
+import { useUser } from '@clerk/clerk-react'
+import MessageLimitPopup from '../components/partials/messageRoom/limitReached'
 
 export default function MessageRoom() {
   const { id } = useParams()
+  const { user } = useUser()
   const navigate = useNavigate()
   const [messages, setMessages] = useState<MessageType[]>([])
   const [newMessage, setNewMessage] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [limitReached, setLimitReached] = useState(false)
 
   useEffect(() => {
     async function CheckRoomStatus() {
@@ -57,7 +62,28 @@ export default function MessageRoom() {
     }
   }, [id, navigate])
 
-  const sendMessage = () => {
+  async function sendMessage(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!user) {
+      return navigate('/')
+    }
+    setLoading(true)
+
+    try {
+      const response = await fetch('http://localhost:8080/message/check', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: user.id }),
+      })
+      if (!response.ok) {
+        setLimitReached(true)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
     if (newMessage.trim()) {
       const newMessageObj = {
         message: newMessage,
@@ -68,6 +94,12 @@ export default function MessageRoom() {
       socket.emit('message_from_client', msgObject, id)
       setNewMessage('')
     }
+    setLoading(false)
+  }
+
+  function handleDisconnect() {
+    socket.disconnect()
+    navigate('/')
   }
 
   return (
@@ -79,31 +111,49 @@ export default function MessageRoom() {
               messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`flex w-full mt-2 space-x-3 max-w-xs ${
-                    message.isUser ? 'ml-auto justify-end' : ''
+                  className={`flex flex-col w-full mt-2 space-x-3 max-w-xs ${
+                    message.isUser ? 'ml-auto items-end' : 'items-start'
                   }`}
                 >
-                  {!message.isUser && (
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
-                  )}
-                  <div>
-                    <div
-                      className={`p-3 rounded ${
-                        message.isUser
-                          ? 'bg-blue-600 text-white rounded-l-lg rounded-br-lg'
-                          : 'bg-gray-300 rounded-r-lg rounded-bl-lg'
-                      }`}
-                    >
-                      <p className="text-sm">{message.message}</p>
+                  <div
+                    className={`flex w-full ${
+                      message.isUser ? 'justify-end' : 'justify-start'
+                    }`}
+                  >
+                    {!message.isUser && (
+                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                    )}
+                    <div>
+                      <div
+                        className={`p-3 rounded ${
+                          message.isUser
+                            ? 'bg-blue-600 text-white rounded-l-lg rounded-br-lg'
+                            : 'bg-gray-300 text-gray-800 rounded-r-lg rounded-bl-lg'
+                        }`}
+                      >
+                        <p className="text-sm">{message.message}</p>
+                      </div>
+                      <p
+                        className={`text-xs mt-1 ${
+                          message.isUser
+                            ? 'text-blue-600 text-right'
+                            : 'text-gray-600 text-left'
+                        }`}
+                      >
+                        {message.isUser ? 'You' : 'Other'}
+                      </p>
                     </div>
+                    {message.isUser && (
+                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                    )}
                   </div>
-                  {message.isUser && (
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
-                  )}
                 </div>
               ))}
           </div>
-          <div className="bg-gray-300 p-4 absolute bottom-0 left-0 w-full flex items-center">
+          <form
+            onSubmit={sendMessage}
+            className="bg-gray-300 p-4 absolute bottom-0 left-0 w-full flex items-center"
+          >
             <input
               className="flex-grow h-10 rounded px-3 text-sm mr-2"
               type="text"
@@ -112,14 +162,24 @@ export default function MessageRoom() {
               onChange={e => setNewMessage(e.target.value)}
             />
             <button
-              className="bg-blue-600 text-white h-10 px-4 rounded"
-              onClick={sendMessage}
+              className="bg-blue-600 text-white h-10 px-4 rounded mr-2"
+              type="submit"
+              disabled={loading}
             >
-              Send
+              {loading ? 'Sending...' : 'Send'}
             </button>
-          </div>
+            <button
+              className="bg-red-600 text-white h-10 px-4 rounded"
+              onClick={handleDisconnect}
+              disabled={loading}
+              type="button"
+            >
+              Disconnect
+            </button>
+          </form>
         </div>
       </div>
+      {limitReached && <MessageLimitPopup />}
     </div>
   )
 }

@@ -45,3 +45,15 @@ export function UpdateAccountToPremiumQuery(): string {
 export function CheckIfRoomExistsQuery(): string {
   return 'SELECT EXISTS(SELECT 1 FROM call_connect_ticket WHERE room_id = ?) AS room_exists'
 }
+
+export function checkMessagesSentLimitQuery(): string {
+  return 'SELECT messages_sent FROM call_connect_account WHERE account_id = ?'
+}
+
+export function incrementMessagesSentQuery(): string {
+  return 'UPDATE call_connect_account SET messages_sent = messages_sent + 1 WHERE account_id = ?'
+}
+
+export function checkIfUserHasTicketQuery(): string {
+  return 'SELECT EXISTS(SELECT 1 FROM call_connect_ticket WHERE account_id = ?) AS has_ticket'
+}
