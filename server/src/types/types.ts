@@ -45,3 +45,11 @@ export type tickets_created = {
 export type update_account = {
   userID: string
 }
+
+export type room_exists = {
+  room_exists: number
+}
+
+export type room_exists_id = {
+  roomId: string
+}

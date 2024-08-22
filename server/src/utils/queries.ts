@@ -41,3 +41,7 @@ export function deleteTicketWithRoomIdQuery(): string {
 export function UpdateAccountToPremiumQuery(): string {
   return 'UPDATE call_connect_account SET premium = 1 WHERE account_id = ?'
 }
+
+export function CheckIfRoomExistsQuery(): string {
+  return 'SELECT EXISTS(SELECT 1 FROM call_connect_ticket WHERE room_id = ?) AS room_exists'
+}

@@ -11,6 +11,7 @@ export default function CreateTicket() {
   const [loading, setLoading] = useState(false)
   const [joinRoom, setJoinRoom] = useState(false)
   const [roomNumber, setRoomNumber] = useState('')
+  const [roomType, setRoomType] = useState(1)
   const [isError, setIsError] = useState({
     show: false,
     errorMessage: '',
@@ -53,6 +54,7 @@ export default function CreateTicket() {
       ...ticket,
       userId: user.id,
     }
+    setRoomType(fullTicket.callMethod)
 
     const validation = validateTicketForm(ticket)
     if (validation.passed) {
@@ -172,7 +174,11 @@ export default function CreateTicket() {
         </div>
       </section>
       {joinRoom && (
-        <JoinRoomModal joinRoom={joinRoom} roomNumber={roomNumber} />
+        <JoinRoomModal
+          joinRoom={joinRoom}
+          roomNumber={roomNumber}
+          roomType={roomType}
+        />
       )}
     </>
   )

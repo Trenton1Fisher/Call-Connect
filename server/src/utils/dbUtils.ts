@@ -2,6 +2,7 @@ import sqlite3 from 'sqlite3'
 import {
   accountExistsQuery,
   checkAccountStatusQuery,
+  CheckIfRoomExistsQuery,
   createFreeAccountWithUserIdQuery,
   createNewTicketQuery,
   deleteTicketWithRoomIdQuery,
@@ -17,6 +18,7 @@ import {
   AccountDetails,
   accountStatus,
   countCheck,
+  room_exists,
   tickets_created,
   TicketSearch,
   TicketSearchTickets,
@@ -229,5 +231,26 @@ export function UpdateAccountToPremium(userId: string): Promise<void> {
       }
       resolve()
     })
+  })
+}
+
+export function CheckIfRoomExists(roomId: string): Promise<number> {
+  return new Promise((resolve, reject) => {
+    databaseConnection.get(
+      CheckIfRoomExistsQuery(),
+      [roomId],
+      (err, row: room_exists | undefined) => {
+        if (err) {
+          console.error('Error Getting Open Tickets:', err.message)
+          reject(new Error('Could Not Search Tickets'))
+        } else {
+          if (row && row.room_exists) {
+            resolve(1)
+          } else {
+            resolve(0)
+          }
+        }
+      }
+    )
   })
 }

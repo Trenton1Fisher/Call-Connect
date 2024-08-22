@@ -5,9 +5,14 @@ import { useNavigate } from 'react-router-dom'
 type JoinRoomProps = {
   joinRoom: boolean
   roomNumber: string
+  roomType: number
 }
 
-export function JoinRoomModal({ joinRoom, roomNumber }: JoinRoomProps) {
+export function JoinRoomModal({
+  joinRoom,
+  roomNumber,
+  roomType,
+}: JoinRoomProps) {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   if (!joinRoom) {
@@ -49,7 +54,9 @@ export function JoinRoomModal({ joinRoom, roomNumber }: JoinRoomProps) {
           </p>
           <div className="flex justify-end space-x-4">
             <Link
-              to={`/call?room=${roomNumber}`}
+              to={`/${
+                roomType === 1 ? 'videoCall' : 'messageRoom'
+              }/${roomNumber}`}
               className="bg-blue-500 text-white px-4 py-2 rounded"
             >
               Join

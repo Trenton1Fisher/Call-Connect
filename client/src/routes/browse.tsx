@@ -145,10 +145,12 @@ export default function Browse() {
                   </a>
                   <div className="text-sm md:text-base text-left text-gray-600 dark:text-gray-400 px-8 py-2">
                     <Link
-                      to={`/call?room=${ticket.room_id}`}
-                      className=" truncate bg-cyan-900 text-white font-semibold p-2 rounded-lg"
+                      to={`/${
+                        ticket.room_category === 1 ? 'videoCall' : 'messageRoom'
+                      }/${ticket.room_id}`}
+                      className="bg-blue-500 text-white px-4 py-2 rounded"
                     >
-                      Join Call
+                      Join
                     </Link>
                   </div>
                 </div>

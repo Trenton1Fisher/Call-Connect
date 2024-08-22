@@ -9,6 +9,8 @@ import Browse from '../routes/browse'
 import CreateTicket from '../routes/create'
 import { Success } from '../routes/success'
 import PaymentCanceled from '../routes/cancel'
+import VideoCall from '../routes/videoCall'
+import MessageRoom from '../routes/messageRoom'
 
 export const routerConstant = [
   {
@@ -24,6 +26,8 @@ export const routerConstant = [
       { path: '/browse', element: <Browse /> },
       { path: '/success', element: <Success /> },
       { path: '/cancel', element: <PaymentCanceled /> },
+      { path: '/videoCall/:id', element: <VideoCall /> },
+      { path: '/messageRoom/:id', element: <MessageRoom /> },
       { path: '*', element: <NotFound /> },
     ],
   },

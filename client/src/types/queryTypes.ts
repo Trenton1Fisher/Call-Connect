@@ -22,3 +22,12 @@ export type TicketSearchTickets = {
 export type ClientSecretReturn = {
   client_secret: string
 }
+
+export type RoomExists = {
+  room_exists: boolean
+}
+
+export type MessageType = {
+  message: string
+  isUser: boolean
+}
