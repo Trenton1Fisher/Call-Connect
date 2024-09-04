@@ -57,3 +57,7 @@ export function incrementMessagesSentQuery(): string {
 export function checkIfUserHasTicketQuery(): string {
   return 'SELECT EXISTS(SELECT 1 FROM call_connect_ticket WHERE account_id = ?) AS has_ticket'
 }
+
+export function DecrementUserTicketsCreated(): string {
+  return 'UPDATE call_connect_account SET tickets_created = tickets_created - 1 WHERE account_id = ?'
+}

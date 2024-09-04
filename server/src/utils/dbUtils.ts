@@ -7,6 +7,7 @@ import {
   checkMessagesSentLimitQuery,
   createFreeAccountWithUserIdQuery,
   createNewTicketQuery,
+  DecrementUserTicketsCreated,
   deleteTicketWithRoomIdQuery,
   getAccountDetailsQuery,
   getTicketsCreatedQuery,
@@ -303,6 +304,19 @@ export function CheckAccountMessagesSent(
 export function incrementMessagesSent(userId: string): Promise<void> {
   return new Promise((resolve, reject) => {
     databaseConnection.get(incrementMessagesSentQuery(), [userId], err => {
+      if (err) {
+        console.error('Error Getting Open Tickets:', err.message)
+        reject(new Error('Could Not Search Tickets'))
+      } else {
+        resolve()
+      }
+    })
+  })
+}
+
+export function RefundFreeAccountTicket(userId: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    databaseConnection.get(DecrementUserTicketsCreated(), [userId], err => {
       if (err) {
         console.error('Error Getting Open Tickets:', err.message)
         reject(new Error('Could Not Search Tickets'))

@@ -2,13 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
-import {
-  messages_sent,
-  room_exists,
-  room_exists_id,
-  TicketRequest,
-  update_account,
-} from './types/types'
+import { messages_sent, TicketRequest, update_account } from './types/types'
 import * as dbUtils from './utils/dbUtils'
 import dotenv from 'dotenv'
 import Stripe from 'stripe'
@@ -20,6 +14,7 @@ if (!STRIPE_SECRET_KEY) {
   console.log('Stripe key not found')
 }
 const stripe = new Stripe(STRIPE_SECRET_KEY as string)
+
 const app = express()
 const PORT = 8080
 
@@ -34,6 +29,7 @@ app.use(express.json())
 // Create the HTTP server
 const server = createServer(app)
 
+// Initialize Socket.IO
 const io = new Server(server, {
   cors: {
     origin: 'http://localhost:5173',
@@ -43,18 +39,48 @@ const io = new Server(server, {
 
 // Handle Socket.IO connections
 io.on('connect', socket => {
-  console.log(`New client connected: ${socket.id}`)
-  socket.on('join_room_with_id', (roomid: string) => {
+  //Message Room Handlers
+  socket.on('join_room_with_id', async (roomid: string) => {
     socket.join(roomid)
-    io.to(roomid).emit('new_user_join')
+    const socketsInRoom = await io.in(roomid).fetchSockets()
+
+    if (socketsInRoom.length > 2) {
+      // Prevent more than 2 users from joining
+      socket.leave(roomid)
+      socket.emit('room_full')
+    } else if (socketsInRoom.length === 2) {
+      // Notify both users that they can start the video connection
+      io.in(roomid).emit('both_users_joined')
+    }
   })
 
   socket.on('message_from_client', function (msgObj, roomId) {
     socket.to(roomId).emit('message_from_server', msgObj)
   })
 
-  socket.on('disconnect', () => {
-    console.log(`Client disconnected: ${socket.id}`)
+  socket.on('guest_left_room', function (room_id: string) {
+    socket.to(room_id).emit('show_left_room')
+  })
+
+  //Video call handlers
+  socket.on('join_video_with_id', async (room_id: string) => {
+    socket.join(room_id)
+    const socketsInRoom = await io.in(room_id).fetchSockets()
+
+    if (socketsInRoom.length > 2) {
+      // Prevent more than 2 users from joining
+      socket.leave(room_id)
+      socket.emit('room_full')
+    } else if (socketsInRoom.length === 2) {
+      // Notify both users that they can start the video connection
+      io.in(room_id).emit('both_users_joined')
+    }
+  })
+
+  socket.on('disconnect', async (room_id: string) => {
+    socket
+      .to(room_id)
+      .emit('guest_left_room', 'Other guest in your room has left')
   })
 
   // You can add more event handlers here
@@ -217,6 +243,7 @@ app.post('/message/check', async (req, res) => {
 
     const account_status = await dbUtils.checkAccountPremiumStatus(userId)
     if (account_status === 1) {
+      await dbUtils.incrementMessagesSent(userId)
       return res.status(200).send('Premium Account')
     }
 
@@ -248,6 +275,21 @@ app.get('/room/exists/:roomId', async (req, res) => {
     console.error('Error checking room existence:', error)
     return res.status(500).json({ room_exists: false })
   }
+})
+
+app.post('/account/refund', async (req, res) => {
+  const body = req.body as { userId: string; roomId: string }
+  console.log(body)
+
+  try {
+    const ticket = await dbUtils.CheckIfUserCreatedRoom(body.userId)
+    if (!ticket) {
+      return res.status(200).send('User did not create this room')
+    }
+    await dbUtils.RefundFreeAccountTicket(body.userId)
+  } catch (error) {}
+
+  return res.status(200).send('account updated')
 })
 
 server.listen(PORT, () => {
