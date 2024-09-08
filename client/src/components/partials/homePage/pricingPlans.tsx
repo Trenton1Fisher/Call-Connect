@@ -1,9 +1,11 @@
 import { SignedIn, SignedOut } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom'
 import { loadStripe } from '@stripe/stripe-js'
+import { useState } from 'react'
+import ReminderPopUp from './reminderPopUp'
 
 export default function SubscriptionPlans() {
-  //Setup Stripe Payment Session
+  const [reminderPopUp, setReminderPopUp] = useState(false)
   async function makePayment() {
     const stripe = await loadStripe(
       import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY as string
@@ -109,7 +111,7 @@ export default function SubscriptionPlans() {
             <div className="flex items-center justify-center text-center">
               <SignedIn>
                 <button
-                  onClick={makePayment}
+                  onClick={() => setReminderPopUp(true)}
                   className="w-full mt-12 px-6 py-3 rounded-xl bg-white text-black transition-all hover:bg-gray-300"
                 >
                   Get Started
@@ -153,6 +155,12 @@ export default function SubscriptionPlans() {
           </div>
         </div>
       </div>
+      {reminderPopUp && (
+        <ReminderPopUp
+          makePayment={makePayment}
+          setReminderPopUp={setReminderPopUp}
+        />
+      )}
     </div>
   )
 }
