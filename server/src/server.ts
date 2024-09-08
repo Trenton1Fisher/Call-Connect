@@ -1,11 +1,12 @@
 import express from 'express'
 import cors from 'cors'
-import { createServer } from 'http'
+import { ClientRequest, createServer } from 'http'
 import { Server } from 'socket.io'
 import { messages_sent, TicketRequest, update_account } from './types/types'
 import * as dbUtils from './utils/dbUtils'
 import dotenv from 'dotenv'
 import Stripe from 'stripe'
+import { StreamClient, UserRequest } from '@stream-io/node-sdk'
 
 dotenv.config()
 
@@ -14,6 +15,16 @@ if (!STRIPE_SECRET_KEY) {
   console.log('Stripe key not found')
 }
 const stripe = new Stripe(STRIPE_SECRET_KEY as string)
+
+const STREAM_API_KEY = process.env.STREAM_API_KEY
+const STREAM_SECRET_KEY = process.env.STREAM_SECRET_KEY
+if (!STREAM_API_KEY || !STREAM_SECRET_KEY) {
+  console.log('stream keys not found')
+}
+const streamClient = new StreamClient(
+  STREAM_API_KEY as string,
+  STREAM_SECRET_KEY as string
+)
 
 const app = express()
 const PORT = 8080
@@ -43,14 +54,18 @@ io.on('connect', socket => {
   socket.on('join_room_with_id', async (roomid: string) => {
     socket.join(roomid)
     const socketsInRoom = await io.in(roomid).fetchSockets()
-
     if (socketsInRoom.length > 2) {
-      // Prevent more than 2 users from joining
-      socket.leave(roomid)
-      socket.emit('room_full')
+      socket.to(socket.id).emit('room_full')
     } else if (socketsInRoom.length === 2) {
-      // Notify both users that they can start the video connection
       io.in(roomid).emit('both_users_joined')
+      try {
+        await dbUtils.UpdateRoomFullStatus(roomid)
+      } catch (error) {
+        console.error(
+          `Error deleting ticket for room ${roomid}:`,
+          (error as Error).message
+        )
+      }
     }
   })
 
@@ -58,7 +73,15 @@ io.on('connect', socket => {
     socket.to(roomId).emit('message_from_server', msgObj)
   })
 
-  socket.on('guest_left_room', function (room_id: string) {
+  socket.on('guest_left_room', async function (room_id: string) {
+    try {
+      await dbUtils.DeleteTicketWithRoomId(room_id)
+    } catch (error) {
+      console.error(
+        `Error deleting ticket for room ${room_id}:`,
+        (error as Error).message
+      )
+    }
     socket.to(room_id).emit('show_left_room')
   })
 
@@ -77,13 +100,15 @@ io.on('connect', socket => {
     }
   })
 
-  socket.on('disconnect', async (room_id: string) => {
-    socket
-      .to(room_id)
-      .emit('guest_left_room', 'Other guest in your room has left')
+  socket.on('callUser', (roomId: string) => {
+    io.to(roomId)
   })
 
-  // You can add more event handlers here
+  socket.on('answerCall', () => {})
+
+  socket.on('disconnect', async (room_id: string) => {
+    io.to(room_id).emit('guest_left_room')
+  })
 })
 
 //Get account Statistics
@@ -233,7 +258,6 @@ app.post('/account/update/premium', async (req, res) => {
 
 app.post('/message/check', async (req, res) => {
   const userId = req.body.userId
-  console.log(userId)
 
   try {
     const ticket = await dbUtils.CheckIfUserCreatedRoom(userId)
@@ -250,7 +274,6 @@ app.post('/message/check', async (req, res) => {
     const messagesSent: messages_sent = await dbUtils.CheckAccountMessagesSent(
       userId
     )
-    console.log(messagesSent)
     const MESSAGE_LIMIT = 100
     if (messagesSent.messages_sent >= MESSAGE_LIMIT) {
       return res.status(403).send('Message limit reached')
@@ -279,7 +302,6 @@ app.get('/room/exists/:roomId', async (req, res) => {
 
 app.post('/account/refund', async (req, res) => {
   const body = req.body as { userId: string; roomId: string }
-  console.log(body)
 
   try {
     const ticket = await dbUtils.CheckIfUserCreatedRoom(body.userId)
@@ -294,4 +316,37 @@ app.post('/account/refund', async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`)
+})
+
+app.get('/getStreamToken/:accountId', async (req, res) => {
+  try {
+    const accountId = req.params.accountId
+
+    if (!accountId) {
+      return res.status(400).send('No Account Found')
+    }
+
+    const userId = accountId
+    const newUser: UserRequest = {
+      id: userId,
+      role: 'user',
+      custom: {
+        color: 'red',
+      },
+      name: `user${accountId}`,
+      image: 'link/to/profile/image',
+    }
+    await streamClient.upsertUsers([newUser])
+
+    // Generate the user token and check for errors
+    const user_id = streamClient.generateUserToken({ user_id: accountId })
+    if (!user_id) {
+      return res.status(500).send('Auth token could not be generated')
+    }
+
+    return res.status(200).json({ user_id })
+  } catch (error) {
+    console.error('Internal server error:', error)
+    return res.status(500).send('Internal server error')
+  }
 })

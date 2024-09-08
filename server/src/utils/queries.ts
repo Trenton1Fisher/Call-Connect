@@ -27,11 +27,11 @@ export function getTicketsCreatedQuery(): string {
 }
 
 export function getTotalNumTicketsQuery(): string {
-  return 'SELECT COUNT(*) AS count FROM call_connect_ticket'
+  return 'SELECT COUNT(*) AS count FROM call_connect_ticket WHERE room_full = FALSE'
 }
 
 export function getTicketsDataQuery(): string {
-  return 'SELECT title, description, premium, room_id, created_at, room_category FROM call_connect_ticket ORDER BY premium DESC, created_at ASC LIMIT ? OFFSET ?'
+  return 'SELECT title, description, premium, room_id, created_at, room_category FROM call_connect_ticket WHERE room_full = FALSE ORDER BY premium DESC, created_at ASC LIMIT ? OFFSET ?'
 }
 
 export function deleteTicketWithRoomIdQuery(): string {
@@ -43,7 +43,7 @@ export function UpdateAccountToPremiumQuery(): string {
 }
 
 export function CheckIfRoomExistsQuery(): string {
-  return 'SELECT EXISTS(SELECT 1 FROM call_connect_ticket WHERE room_id = ?) AS room_exists'
+  return 'SELECT EXISTS(SELECT 1 FROM call_connect_ticket WHERE room_id = ? AND room_full = FALSE) AS room_exists'
 }
 
 export function checkMessagesSentLimitQuery(): string {
@@ -60,4 +60,8 @@ export function checkIfUserHasTicketQuery(): string {
 
 export function DecrementUserTicketsCreated(): string {
   return 'UPDATE call_connect_account SET tickets_created = tickets_created - 1 WHERE account_id = ?'
+}
+
+export function UpdateTicketRoomFullQuery(): string {
+  return 'UPDATE call_connect_ticket SET room_full = TRUE WHERE room_id = ?'
 }

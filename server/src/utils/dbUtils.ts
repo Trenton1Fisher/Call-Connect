@@ -16,6 +16,7 @@ import {
   incrementMessagesSentQuery,
   updateAccountDetailsQuery,
   UpdateAccountToPremiumQuery,
+  UpdateTicketRoomFullQuery,
 } from './queries'
 import {
   accountCheck,
@@ -323,6 +324,18 @@ export function RefundFreeAccountTicket(userId: string): Promise<void> {
       } else {
         resolve()
       }
+    })
+  })
+}
+
+export function UpdateRoomFullStatus(roomId: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    databaseConnection.run(UpdateTicketRoomFullQuery(), [roomId], err => {
+      if (err) {
+        console.error('Error Updating Ticket Full Status: ', err.message)
+        reject(new Error('Could not update room full status'))
+      }
+      resolve()
     })
   })
 }

@@ -6,6 +6,7 @@ import { useUser } from '@clerk/clerk-react'
 import MessageLimitPopup from '../components/partials/messageRoom/limitReached'
 import Loading from '../components/partials/videoRoom/loading'
 import GuestLeftPopup from '../components/partials/messageRoom/guestLeft'
+import RoomFull from '../components/partials/messageRoom/roomFull'
 
 export default function MessageRoom() {
   const { id } = useParams()
@@ -17,6 +18,7 @@ export default function MessageRoom() {
   const [waitingForGuest, setWaitingForGuest] = useState(false)
   const [limitReached, setLimitReached] = useState(false)
   const [guestLeft, setGuestLeft] = useState(false)
+  const [roomFull, setRoomFull] = useState(false)
 
   useEffect(() => {
     async function CheckRoomStatus() {
@@ -46,28 +48,28 @@ export default function MessageRoom() {
       ])
     }
 
-    const handleBothUsersJoined = () => {
-      setWaitingForGuest(false)
-    }
-
-    const handleGuestLeftRoom = () => {
-      setGuestLeft(true)
-    }
-
     socket.on('connect', () => {
       setWaitingForGuest(true)
       socket.emit('join_room_with_id', id)
     })
 
-    socket.on('disconnect', () => {
-      console.log('left room')
-    })
+    const handleRoomFull = () => {
+      console.log('called')
+      setRoomFull(true)
+      setWaitingForGuest(false)
+    }
 
     socket.on('message_from_server', handleNewMessage)
 
-    socket.on('show_left_room', handleGuestLeftRoom)
+    socket.on('show_left_room', () => setGuestLeft(true))
 
-    socket.on('both_users_joined', handleBothUsersJoined)
+    socket.on('both_users_joined', () => setWaitingForGuest(false))
+
+    socket.on('room_full', () => handleRoomFull)
+
+    socket.on('disconnect', () => {
+      console.log('Left Room')
+    })
 
     CheckRoomStatus()
 
@@ -76,6 +78,7 @@ export default function MessageRoom() {
       socket.off('message_from_server')
       socket.off('show_left_room')
       socket.off('both_users_joined')
+      socket.off('room_full')
       socket.off('disconnect')
       socket.disconnect()
     }
@@ -151,7 +154,7 @@ export default function MessageRoom() {
                         }`}
                       >
                         {!message.isUser && (
-                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300 mx-2"></div>
                         )}
                         <div>
                           <div
@@ -174,7 +177,7 @@ export default function MessageRoom() {
                           </p>
                         </div>
                         {message.isUser && (
-                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300"></div>
+                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300 mx-2"></div>
                         )}
                       </div>
                     </div>
@@ -211,6 +214,7 @@ export default function MessageRoom() {
           </div>
           {limitReached && <MessageLimitPopup />}
           {guestLeft && <GuestLeftPopup />}
+          {roomFull && <RoomFull />}
         </div>
       )}
     </>

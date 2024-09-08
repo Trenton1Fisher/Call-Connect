@@ -13,6 +13,7 @@
     "build": "tsc && node dist/server.js"
   },
   "dependencies": {
+    "@stream-io/node-sdk": "^0.4.0",
     "@types/node": "^22.2.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
