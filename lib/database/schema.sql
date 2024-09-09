@@ -8,7 +8,7 @@ CREATE TABLE call_connect_ticket (
     premium BOOLEAN NOT NULL,
     room_category INTEGER NOT NULL CHECK(room_category IN (1,2)),
     room_id TEXT NOT NULL,
-    room_full BOOLEAN NOT NULL DEFAULT FALSE,  -- New column to track if the room is full
+    room_full BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

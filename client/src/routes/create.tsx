@@ -19,7 +19,7 @@ export default function CreateTicket() {
   const [ticket, setTicket] = useState({
     title: '',
     description: '',
-    callMethod: 1,
+    callMethod: 2,
   })
 
   if (!isLoaded) {
@@ -158,8 +158,8 @@ export default function CreateTicket() {
                     }))
                   }
                 >
-                  <option value="1">Video Call</option>
                   <option value="2">Message Room</option>
+                  <option value="2">Video Call(ComingSoon)</option>
                 </select>
               </div>
               <button
