@@ -1,7 +1,10 @@
 import { SignedIn, SignedOut } from '@clerk/clerk-react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import MobileNav from './mobileNav'
 
 export default function Navbar() {
+  const [openMobileNav, setOpenMobileNav] = useState(false)
   return (
     <nav className="py-4 px-4 sm:px-10 z-50 min-h-[70px] shadow-lg sticky top-0 z-999 bg-[#f3f3f3]">
       <div className="relative flex flex-wrap items-center gap-4">
@@ -80,7 +83,6 @@ export default function Navbar() {
             </li>
           </ul>
         </div>
-
         <div className="flex ml-auto">
           <SignedIn>
             <Link
@@ -104,7 +106,11 @@ export default function Navbar() {
               Login
             </Link>
           </SignedOut>
-          <button id="toggleOpen" className="lg:hidden ml-7">
+          <button
+            onClick={() => setOpenMobileNav(prev => !prev)}
+            id="toggleOpen"
+            className="lg:hidden ml-7"
+          >
             <svg
               className="w-7 h-7"
               fill="#000"
@@ -120,6 +126,12 @@ export default function Navbar() {
           </button>
         </div>
       </div>
+      {openMobileNav && (
+        <MobileNav
+          openMobileNav={openMobileNav}
+          setOpenMobileNav={setOpenMobileNav}
+        />
+      )}
     </nav>
   )
 }
