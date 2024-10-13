@@ -44,7 +44,7 @@ export function JoinRoomModal({
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-        <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm mx-auto">
+        <div className="bg-white dark:bg-[#2b2b2b] p-6 rounded-lg shadow-lg max-w-sm mx-auto">
           <h2 className="text-lg font-semibold mb-4">
             Would You Like to Join Your Room?
           </h2>

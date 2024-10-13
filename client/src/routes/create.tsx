@@ -94,7 +94,7 @@ export default function CreateTicket() {
         <CreateTicketErrorModal message={isError.errorMessage} />
       )}
       <section className="min-h-screen flex justify-center items-center md:mt-[-50px] ticket-container">
-        <div className="rounded-xl bg-card border-4 border-opacity-10 border-cyan-900 text-card-foreground w-full max-w-md mx-auto bg-white shadow-xl">
+        <div className="rounded-xl bg-card border-4 border-opacity-10 dark:bg-[#2b2b2b] border-cyan-900 text-card-foreground w-full max-w-md mx-auto bg-white shadow-xl">
           <div className="flex flex-col space-y-1.5 p-6">
             <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">
               Create a Support Ticket

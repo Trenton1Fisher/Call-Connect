@@ -134,7 +134,7 @@ export default function MessageRoom() {
         <Loading />
       ) : (
         <div className="flex flex-col items-center justify-center bg-gray-100 text-gray-800 p-10">
-          <div className="flex flex-col w-full max-w-xl bg-white shadow-xl rounded-lg">
+          <div className="flex flex-col w-full max-w-xl bg-white dark:bg-[#2b2b2b] shadow-xl rounded-lg">
             <div className="relative flex flex-col flex-grow h-[calc(100vh-150px)]">
               <div className="flex flex-col flex-grow p-4 pb-24 overflow-y-auto">
                 <p className="text-xs text-gray-800 text-center">

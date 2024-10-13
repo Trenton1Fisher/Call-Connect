@@ -19,7 +19,7 @@ export default function MobileNav({
         >
           <div
             onClick={e => e.stopPropagation()}
-            className="absolute h-screen left-0 top-0 w-60 bg-white z-[999] px-5 border-r border-black overflow-y-hidden flex flex-col gap-10"
+            className="absolute h-screen left-0 top-0 w-60 bg-white dark:bg-[#2b2b2b] z-[999] px-5 border-r border-black overflow-y-hidden flex flex-col gap-10"
           >
             <div className="border-b py-5 text-center">
               {' '}

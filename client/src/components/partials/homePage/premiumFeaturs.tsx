@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 export default function PremiumFeatures() {
   return (
-    <div className="mt-32 bg-white rounded-md px-4 py-12">
+    <div className="mt-32 bg-white dark:bg-[#2b2b2b] rounded-md px-4 py-12">
       <div className="grid md:grid-cols-2 justify-center items-center gap-10 max-w-7xl mx-auto">
         <div className="max-md:text-center">
           <h2 className="md:text-4xl text-3xl font-extrabold mb-6">

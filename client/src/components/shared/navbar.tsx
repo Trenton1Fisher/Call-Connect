@@ -6,7 +6,7 @@ import MobileNav from './mobileNav'
 export default function Navbar() {
   const [openMobileNav, setOpenMobileNav] = useState(false)
   return (
-    <nav className="py-4 px-4 sm:px-10 z-50 min-h-[70px] shadow-lg sticky top-0 z-999 bg-[#f3f3f3]">
+    <nav className="py-4 px-4 sm:px-10 z-50 min-h-[70px] shadow-lg sticky top-0 z-999 bg-[#f3f3f3] dark:bg-[#2b2b2b]">
       <div className="relative flex flex-wrap items-center gap-4">
         <Link to="/" className="flex gap-2 font-bold items-center">
           <svg

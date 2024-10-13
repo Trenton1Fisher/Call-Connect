@@ -15,6 +15,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    background-color: #141414;
+  }
+}
+
 .pricing-div {
   background-image: url('flash2.png');
   background-position: right bottom;

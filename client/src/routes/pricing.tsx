@@ -21,7 +21,7 @@ export default function Pricing() {
           <>
             <div
               onClick={() => setOpenFAQ({ open: !openFAQ.open, id: index })}
-              className="mb-4 my-2 flex shadow-lg bg-zinc-200 rounded-lg p-4 cursor-pointer"
+              className="mb-4 my-2 flex shadow-lg bg-zinc-200 dark:bg-[#2b2b2b] rounded-lg p-4 cursor-pointer"
             >
               <h3 className="font-bold text-lg md:text-xl">
                 {question.question}
@@ -31,7 +31,7 @@ export default function Pricing() {
               </p>
             </div>
             {openFAQ.open && index === openFAQ.id && (
-              <p className="font-semibold text-gray-500 mb-8">
+              <p className="font-semibold dark:text-white text-gray-500 mb-8">
                 {question.answer}
               </p>
             )}

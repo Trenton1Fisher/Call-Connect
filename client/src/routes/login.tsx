@@ -4,7 +4,7 @@ export default function Login() {
   return (
     <section className="pt-32 flex flex-col justify-center items-center h-screen mt-[-50px] md:mt-[-90px] auth-container">
       <div className="w-full max-w-md mx-auto mt-8 mb-8 mx-2 bg-white shadow-md rounded-lg">
-        <div className="px-6 py-4">
+        <div className="px-6 py-4 dark:text-black ">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">
             Pre-built Account Information
           </h3>

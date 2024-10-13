@@ -60,7 +60,7 @@ export default function Browse() {
   return (
     <div className="font-sans antialiased min-h-screen browse-container">
       <h1 className="font-sans font-bold text-3xl md:text-5xl my-8 leading-none text-center text-gray-600 dark:text-gray-200">
-        {tickets?.count} Results Found
+        {tickets?.count || '0'} Results Found
       </h1>
       {tickets ? (
         tickets.tickets.map((ticket, index) => (
@@ -120,7 +120,7 @@ export default function Browse() {
               )}
             </div>
 
-            <div className="bg-gray-50 md:bg-white md:shadow-xl md:rounded-lg">
+            <div className="bg-gray-50 dark:bg-[#2b2b2b] md:bg-white md:shadow-xl md:rounded-lg">
               <div className="bg-gray-50 md:bg-white md:shadow-lg dark:bg-gray-900 md:dark:bg-gray-800">
                 <a href="#">
                   <div className="p-4">
@@ -159,7 +159,7 @@ export default function Browse() {
           </div>
         ))
       ) : (
-        <div>No Results Found</div>
+        <div className="text-center">No Results Found</div>
       )}
     </div>
   )

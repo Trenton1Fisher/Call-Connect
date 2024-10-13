@@ -40,7 +40,7 @@ export default function SubscriptionPlans() {
         </h2>
       </div>
       <div className="grid lg:grid-cols-2 mx-auto gap-8 mt-16 md:w-2/3 w-full">
-        <div className="bg-white rounded sm:p-6 p-4 min-h-[600px]">
+        <div className="bg-white dark:bg-[#2b2b2b] rounded sm:p-6 p-4 min-h-[600px]">
           <h3 className="text-xl font-semibold">Free</h3>
           <p className="mt-2">
             Ideal for individuals who need quick access to basic features.
