@@ -79,12 +79,15 @@ Ensure that you do not push sensitive information (like API keys) back into the 
    npm install
    ```
 3. Obtain required API Keys
-4. Enter your Client Side API keys in a `.env.local` in the client directory
+  - Clerk Authentication Key: Sign up at https://clerk.com, navigate to the Developer tab, and generate your Clerk API Key.
+  - Stripe API Key: Sign up at https://stripe.com, go to the Developer tab, and generate your Stripe API Key.
+    
+5. Enter your Client Side API keys in a `.env.local` in the client directory
    ```js
    VITE_CLERK_PUBLISHABLE_KEY=your-clerk-publishable-key
    VITE_STRIPE_PUBLISHABLE_KEY=your-stripe-publishable-key
    ```
-5. Enter your Server Side API keys in a `.env` in the server directory 
+6. Enter your Server Side API keys in a `.env` in the server directory 
    ```js
    STRIPE_SECRET_KEY=your-stripe-secret-key
    ```
@@ -114,7 +117,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 Trenton Fisher
 trenton0fisher@gmail.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/Trenton1Fisher/job-search)
+Project Link: [https://github.com/github_username/repo_name](https://github.com/Trenton1Fisher/Call-Connect)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
