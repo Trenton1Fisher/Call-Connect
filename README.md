@@ -92,7 +92,10 @@ Ensure that you do not push sensitive information (like API keys) back into the 
    STRIPE_SECRET_KEY=your-stripe-secret-key
    ```
    
-7. Set Up SQLite Database
+7. Install SQLite
+- If SQLite is not installed on your system, download it from https://www.sqlite.org/download.html and follow the installation instructions for your platform.
+  
+9. Set Up SQLite Database
    - Create a directory to hold your SQLite database, for example database/
      ```
      mkdir database
@@ -101,12 +104,21 @@ Ensure that you do not push sensitive information (like API keys) back into the 
       ```
       sqlite3 database/database.db < lib/database/schema.sql
       ```
-    - Update the path to your SQLite Database in the server direcory, Open dbUtils.ts and update the database path to match the location of your SQLite Database
+    - Update the path to your SQLite Database in the server direcory, Open src/utils/dbUtils.ts and update the database path to match the location of your SQLite Database
       ```
-      const dbPath = 'path/to/your/database.db';
+      const databaseConnection = new sqlite3.Database(
+        'Your Database path relative to this file location',
+         err => {
+        if (err) {
+          console.error('Error connecting to the database:', err.message)
+        } else {
+          console.log('Connected to the mydatabase.db SQLite database.')
+        }
+        }
+      )
       ```
       
-9. Change git remote url to avoid accidental pushes to base project
+10. Change git remote url to avoid accidental pushes to base project
    ```sh
    git remote set-url origin github_username/repo_name
    git remote -v # confirm the changes
