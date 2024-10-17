@@ -8,10 +8,10 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">UK Jobble</h3>
+<h3 align="center">Call Connect</h3>
 
   <p align="center">
-    Job Searching Website Allowing users to search over 130000 jobs in the United Kingdom
+    A platform where users can post problem tickets and connect with others via private message rooms to collaborate and solve issues in real-time.
     <br />
     <a href="https://job.trentonfisher.xyz">View Demo</a>
   </p>
@@ -32,7 +32,6 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
@@ -56,42 +55,38 @@
 
 ## Built With
 
-- ⚡️ Next.js 14
-- 🐘 PostgreSQL
+- ⚡️ React
+- 🐘 SQLite
 - ✨ TypeScript
-- 💨 Auth0
+- 💨 Socket.io
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-First Get keys from vercel PostgeSQL database and Reed.uk api keys
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Please follow the steps below to obtain the required API keys and set up the project with all dependencies. 
+Ensure that you do not push sensitive information (like API keys) back into the repository.
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/Trenton1Fisher/job-search
+   git clone https://github.com/Trenton1Fisher/Call-Connect
    ```
-3. Install NPM packages
+2. Install NPM packages in both client and server direcories
    ```sh
    npm install
    ```
-4. Enter your API keys in a `.env.local` file
+3. Obtain required API Keys
+4. Enter your Client Side API keys in a `.env.local` in the client directory
    ```js
-   const API_KEY = 'ENTER YOUR API';
+   VITE_CLERK_PUBLISHABLE_KEY=your-clerk-publishable-key
+   VITE_STRIPE_PUBLISHABLE_KEY=your-stripe-publishable-key
+   ```
+5. Enter your Server Side API keys in a `.env` in the server directory 
+   ```js
+   STRIPE_SECRET_KEY=your-stripe-secret-key
    ```
 5. Change git remote url to avoid accidental pushes to base project
    ```sh
