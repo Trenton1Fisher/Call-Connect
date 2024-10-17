@@ -4,9 +4,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+ ![Screenshot 2024-08-25 010118](https://github.com/user-attachments/assets/b505feae-3c6a-4481-a23e-895c5b1b46fd)
+
 
 <h3 align="center">Call Connect</h3>
 
@@ -136,7 +135,7 @@ Ensure that you do not push sensitive information (like API keys) back into the 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## More ScreenShots
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
