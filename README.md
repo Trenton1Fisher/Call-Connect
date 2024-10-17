@@ -17,8 +17,6 @@
   </p>
 </div>
 
-
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -49,7 +47,18 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+Call-Connect is a full-stack web application designed to facilitate real-time problem-solving by connecting users who need assistance with others who are willing to help. Logged-in users can create detailed problem tickets describing their issues, and other users can join in to collaborate and offer solutions in private chat rooms. Whether it's troubleshooting technical problems, seeking advice, or providing expertise, Call-Connect enables seamless, real-time communication between users.
+
+The platform is built with modern web technologies and integrates Socket.IO for real-time messaging, allowing users to engage in dynamic conversations without delays. Additionally, users can choose between free and premium account options, each offering tailored features and support based on their needs. This premium model helps sustain the platform while offering added benefits to power users.
+
+Key Features:
+- User Account Creation and Authentication: Powered by Clerk for secure and streamlined user authentication.
+- Real-Time Collaboration: Instant messaging within private rooms using Socket.IO, enabling efficient problem-solving.
+- Problem Tickets: Logged-in users can create, manage, and join problem tickets that describe their issues in detail.
+- Private Messaging Rooms: Each ticket is assigned a private room where users can collaborate in real time to resolve the issue.
+- Premium and Free Accounts:
+   -- Free accounts allow users to create and join a limited number of problem tickets.
+   --Premium accounts offer enhanced features such as unlimited ticket creation, priority support, and access to exclusive problem-solving tools.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -126,17 +135,12 @@ Ensure that you do not push sensitive information (like API keys) back into the 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- USAGE EXAMPLES -->
 ## Usage
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- CONTACT -->
 ## Contact
@@ -147,11 +151,6 @@ trenton0fisher@gmail.com
 Project Link: [https://github.com/github_username/repo_name](https://github.com/Trenton1Fisher/Call-Connect)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
