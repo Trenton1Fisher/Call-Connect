@@ -4,7 +4,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-![uk-jobble](https://github.com/user-attachments/assets/a5b9b639-3512-447f-ac2a-ee632e677424)
+[uk-jobble](https://github.com/user-attachments/assets/a5b9b639-3512-447f-ac2a-ee632e677424)
 
 <h3 align="center">Call Connect</h3>
 
