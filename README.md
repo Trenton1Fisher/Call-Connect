@@ -57,8 +57,8 @@ Key Features:
 - Problem Tickets: Logged-in users can create, manage, and join problem tickets that describe their issues in detail.
 - Private Messaging Rooms: Each ticket is assigned a private room where users can collaborate in real time to resolve the issue.
 - Premium and Free Accounts:
-   -- Free accounts allow users to create and join a limited number of problem tickets.
-   --Premium accounts offer enhanced features such as unlimited ticket creation, priority support, and access to exclusive problem-solving tools.
+  Free accounts allow users to create and join a limited number of problem tickets.
+  Premium accounts offer enhanced features such as unlimited ticket creation, priority support, and access to exclusive problem-solving tools.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
