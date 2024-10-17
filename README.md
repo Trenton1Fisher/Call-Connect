@@ -4,15 +4,14 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
- ![Screenshot 2024-08-25 010118](https://github.com/user-attachments/assets/b505feae-3c6a-4481-a23e-895c5b1b46fd)
-
+![uk-jobble](https://github.com/user-attachments/assets/a5b9b639-3512-447f-ac2a-ee632e677424)
 
 <h3 align="center">Call Connect</h3>
 
   <p align="center">
     A platform where users can post problem tickets and connect with others via private message rooms to collaborate and solve issues in real-time.
     <br />
-    <a href="https://job.trentonfisher.xyz">View Demo</a>
+    <a href="https://job.trentonfisher.xyz" target="_blank">View Demo</a>
   </p>
 </div>
 
