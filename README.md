@@ -167,7 +167,7 @@ Ensure that you do not push sensitive information (like API keys) back into the 
 Trenton Fisher
 trenton0fisher@gmail.com
 
-Project Link: [https://github.com/github_username/repo_name](https://github.com/Trenton1Fisher/Call-Connect)
+Project Link: [https://github.com/github_username/Call-Connect](https://github.com/Trenton1Fisher/Call-Connect)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
