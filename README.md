@@ -57,7 +57,7 @@ Key Features:
 - Private Messaging Rooms: Each ticket is assigned a private room where users can collaborate in real time to resolve the issue.
 - Premium and Free Accounts:
   Free accounts allow users to create and join a limited number of problem tickets.
-  Premium accounts offer enhanced features such as unlimited ticket creation, priority support, and access to exclusive problem-solving tools.
+  Premium accounts offer enhanced features such as unlimited ticket creation, and unlimited messages per account.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
