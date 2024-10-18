@@ -12,7 +12,7 @@
   <p align="center">
     A platform where users can post problem tickets and connect with others via private message rooms to collaborate and solve issues in real-time.
     <br />
-    <a href="https://job.trentonfisher.xyz" target="_blank">View Demo</a>
+    <a href="https://call.trentonfisher.xyz" target="_blank">View Demo</a>
   </p>
 </div>
 
@@ -167,7 +167,7 @@ Ensure that you do not push sensitive information (like API keys) back into the 
 Trenton Fisher
 trenton0fisher@gmail.com
 
-Project Link: [https://github.com/github_username/Call-Connect](https://github.com/Trenton1Fisher/Call-Connect)
+Project Link: [https://call.trentonfisher.xyz](https://call.trentonfisher.xyz)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
