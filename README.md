@@ -4,7 +4,6 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-![Call-Connect](https://github.com/user-attachments/assets/fd510707-f940-4caa-9a18-2b9c458ca61c)
 
 <img src="https://github.com/user-attachments/assets/fd510707-f940-4caa-9a18-2b9c458ca61c" alt="HomePage of Call-Connect" />
 
@@ -138,7 +137,27 @@ Ensure that you do not push sensitive information (like API keys) back into the 
 <!-- USAGE EXAMPLES -->
 ## More ScreenShots
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+- Login Page with pre made dev accounts allowing users to create their own personal accounts or test premium features with a test account
+<img src="https://github.com/user-attachments/assets/5e1b30f4-70b2-4d74-b9a1-a6132450cf70" alt="Login Page" />
+
+- Users Can view their account page, including account statistics and account permission status(Zoomed out to fit all content in image)
+<img src="https://github.com/user-attachments/assets/78fce48f-3992-416c-9827-858bbc63e02a" alt="Account Page"/>
+
+- Create page that allows users to create new problem tickets to connect with others in a private message room
+<img src="https://github.com/user-attachments/assets/86784e44-922d-4ef2-9448-ea753cc4d9ad" alt="Create Page" />
+
+- Other logged in users can view made tickets and join rooms they feel qualified to help with
+ <img src="https://github.com/user-attachments/assets/e8db5295-0080-46a3-b249-82b699c5b3f8" alt="Join Page"/>
+
+
+- Message Room where two users can communicate in real time via messages
+<img src="https://github.com/user-attachments/assets/6f1f1e74-81e9-4b0c-9d78-ba266ae8a716" alt="Message Room" />
+
+- Alert to give notice that a user has left the room
+<img src="https://github.com/user-attachments/assets/f9258437-2bf0-48ed-88b8-9991ab2f1666" alt="Left room alert" />
+
+- Stripe Checkout page allowing users to upgrade their account for premium features
+<img src="https://github.com/user-attachments/assets/93de2543-32f5-42db-9a68-5a2b7ef4037d" alt="Stripe Checkout" />
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
